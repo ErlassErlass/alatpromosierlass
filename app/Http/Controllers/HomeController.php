@@ -60,19 +60,21 @@ class HomeController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
+            'role' => 'required|in:admin,petugas',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
         ]);
-
+    
         // Simpan data ke dalam database
         User::create([
+            'role' => $validated['role'], // Ganti ini dengan nilai yang valid
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
-
-        return redirect()->route('admin.user.index')->with('success', 'User berhasil ditambahkan');
+    
+        return redirect()->route('admin.user.index')->with('success', 'User  berhasil ditambahkan');
     }
 
     public function edit($id)
