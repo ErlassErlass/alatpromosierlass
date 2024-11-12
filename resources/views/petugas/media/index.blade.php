@@ -331,7 +331,7 @@ function openEditModal(id, category, mediaType) {
                 </div>
                 <div class="form-group">
                     <label for="document">Upload Dokumen</label>
-                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
+                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx,.xlsx" required>
                 </div>
             `;
         }

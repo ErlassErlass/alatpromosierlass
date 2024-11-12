@@ -225,7 +225,7 @@ class MediaController extends Controller
                 $rules['description'] = 'required|string';
                 $rules['upload_date'] = 'required|date';
                 $rules['image'] = 'nullable|mimes:jpeg,png,jpg,gif,svg|max:10240';
-                $rules['document'] = 'nullable|file|mimes:pdf,doc,docx|max:20480';
+                $rules['document'] = 'nullable|file|mimes:pdf,doc,docx,xlsx,xls|max:20480';
                 break;
 
         case 'promotion_videos':
@@ -262,7 +262,7 @@ class MediaController extends Controller
             'media' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi|max:200000',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:10240',
             'quote' => 'nullable|string',
-            'document' => 'nullable|file|mimes:pdf,doc,docx|max:20480',
+            'document' => 'nullable|file|mimes:pdf,doc,docx,xlsx,xls|max:20480',
         ];
     }
 
