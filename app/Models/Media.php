@@ -23,6 +23,7 @@ class Media extends Model
         'path',
         'user_id',
         'quote',
+        'document',
     ];
 
     // Di dalam model Media

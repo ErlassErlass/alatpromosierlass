@@ -15,12 +15,19 @@ class MediaController extends Controller
         \Log::info('Upload media called');
         // Validasi file dan input
         $rules = $this->getValidationRules($request->input('category'));
+        try {
+            $request->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed: ' . json_encode($e->errors()));
+            return back()->withErrors($e->errors());
+        }
         $request->validate($rules);
     
         // Upload file media, gambar, dan thumbnail
         $media = $this->handleFileUpload($request, 'media', 'public/videos', 'video_title');
         $image = $this->handleFileUpload($request, 'image', 'public/images', 'title');
         $thumbnail = $this->handleFileUpload($request, 'thumbnail', 'public/thumbnails', 'video_title');
+        $document = $this->handleFileUpload($request, 'document', 'public/documents', 'designer_name'); // Mengupload dokumen
     
         // Simpan data media ke database
         $createdMedia = Media::create([
@@ -32,10 +39,10 @@ class MediaController extends Controller
             'upload_date' => $request->input('upload_date', null),
             'description' => $request->input('description', null),
             'designer_name' => $request->input('designer_name', null),
-            'design_date' => $request->input('design_date', null),
             'video_title' => $request->input('video_title', null),
             'video_date' => $request->input('video_date', null),
             'quote' => $request->input('quote', null),
+            'document' => $document, // Simpan dokumen
             'user_id' => auth()->id(), // Simpan ID user yang mengupload
         ]);
     
@@ -105,13 +112,16 @@ class MediaController extends Controller
         if ($request->hasFile('image')) {
             $this->updateFile($request, $media, 'image', 'public/images', 'title');
         }
+
+        if ($request->hasFile('document')) {
+            $this->updateFile($request, $media, 'document', 'public/documents', 'designer_name');
+        }
         
         // Update data lainnya jika ada
         $updateData = [
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'designer_name' => $request->input('designer_name'),
-            'design_date' => $request->input('design_date'),
             'upload_date' => $request->input('upload_date'),
             'video_title' => $request->input('video_title'),
             'video_date' => $request->input('video_date'),
@@ -156,26 +166,35 @@ class MediaController extends Controller
     private function handleFileUpload(Request $request, $fileInputName, $storagePath, $titleInputName)
     {
         if ($request->hasFile($fileInputName)) {
-            $file = $request->file($fileInputName);
+            $file = $request ->file($fileInputName);
+            \Log::info("File input name: {$fileInputName}, File name: {$file->getClientOriginalName()}");
+    
+            // Tambahkan log untuk ukuran file
+            \Log::info("File size: " . $file->getSize());
+    
             // Tambahkan timestamp atau ID media ke nama file
             $fileName = Str::slug($request->input($titleInputName, 'default')) . '-' . time() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs($storagePath, $fileName);
     
-            // Tambahkan logging
             \Log::info("File uploaded: {$fileName} to {$filePath}");
     
             return Storage::url($filePath);
         }
+        \Log::warning("No file found for input: {$fileInputName}");
         return null;
-    }    
+    }
 
     public function destroy($id)
     {
         $media = Media::find($id);
         if ($media) {
-            // Jika file yang di-upload perlu dihapus juga
+            // Hapus file gambar jika ada
             if ($media->image && Storage::exists($media->image)) {
                 Storage::delete($media->image);
+            }
+            // Hapus file dokumen jika ada
+            if ($media->document && Storage::exists($media->document)) {
+                Storage::delete($media->document);
             }
             $media->delete();
             return response()->json(['success' => true, 'message' => 'Media berhasil dihapus']);
@@ -184,29 +203,30 @@ class MediaController extends Controller
     }
 
     private function getValidationRules($category)
-{
-    $rules = ['category' => 'required|string'];
-
-    switch ($category) {
-        case 'motivational_quotes':
-            $rules['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:10240';
-            $rules['upload_date'] = 'required|date';
-            $rules['quote'] = 'required|string|max:500';
-            break;
-
-        case 'alat_promosi_internal':
-            $rules['description'] = 'required|string';
-            $rules['title'] = 'required|string|max:255';
-            $rules['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:10240'; // Hanya menerima gambar
-            $rules['upload_date'] = 'required|date';
-            break;
-
-        case 'design_corner':
-            $rules['designer_name'] = 'required|string|max:255';
-            $rules['description'] = 'required|string';
-            $rules['design_date'] = 'required|date';
-            $rules['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:10240'; // Hanya menerima gambar
-            break;
+    {
+        $rules = ['category' => 'required|string'];
+    
+        switch ($category) {
+            case 'motivational_quotes':
+                $rules['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:10240';
+                $rules['upload_date'] = 'required|date';
+                $rules['quote'] = 'required|string|max:500';
+                break;
+    
+            case 'alat_promosi_internal':
+                $rules['description'] = 'required|string';
+                $rules['title'] = 'required|string|max:255';
+                $rules['image'] = 'required|mimes:jpeg,png,jpg,gif,svg|max:10240';
+                $rules['upload_date'] = 'required|date';
+                break;
+    
+            case 'design_corner':
+                $rules['designer_name'] = 'required|string|max:255';
+                $rules['description'] = 'required|string';
+                $rules['upload_date'] = 'required|date';
+                $rules['image'] = 'nullable|mimes:jpeg,png,jpg,gif,svg|max:10240';
+                $rules['document'] = 'nullable|file|mimes:pdf,doc,docx|max:20480';
+                break;
 
         case 'promotion_videos':
             $rules['video_title'] = 'required|string|max:255';
@@ -235,7 +255,6 @@ class MediaController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'designer_name' => 'nullable|string|max:255',
-            'design_date' => 'nullable|date',
             'upload_date' => 'nullable|date',
             'video_title' => 'nullable|string|max:255',
             'video_date' => 'nullable|date',
@@ -243,18 +262,18 @@ class MediaController extends Controller
             'media' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi|max:200000',
             'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:10240',
             'quote' => 'nullable|string',
+            'document' => 'nullable|file|mimes:pdf,doc,docx|max:20480',
         ];
     }
 
     private function deleteFile($fileUrl, $storagePath)
-{
-    if ($fileUrl && Storage::exists($storagePath . '/' . basename($fileUrl))) {
-        // Tambahkan logging
-        \Log::info("Deleting file: {$storagePath}/" . basename($fileUrl));
-        
-        Storage::delete($storagePath . '/' . basename($fileUrl));
+    {
+        $fileName = basename($fileUrl); // Ambil nama file dari URL
+        if ($fileName && Storage::exists("{$storagePath}/{$fileName}")) {
+            \Log::info("Deleting file: {$storagePath}/{$fileName}");
+            Storage::delete("{$storagePath}/{$fileName}");
+        }
     }
-}
 
 public function showUploadForm()
 {
@@ -289,11 +308,16 @@ public function showUploadForm()
 
     public function showDesignCorner()
     {
+
+    
+        // Fetch media items for the 'design_corner' category
         $media = Media::where('category', 'design_corner')->get()->map(function ($item) {
-            // Menandai sebagai baru jika diupload dalam 1 hari terakhir
-            $item->is_new = $this->isMediaNew($item->design_date);
+            // Mark as new if uploaded in the last day
+            $item->is_new = $this->isMediaNew($item->upload_date);
             return $item;
         });
+    
+        // Return the view with both media and documents
         return view('categories.design_corner', compact('media'));
     }
 
@@ -338,4 +362,5 @@ public function showUploadForm()
             $media = Media::findOrFail($title); // Ambil detail media berdasarkan ID
             return view('categories.detail', compact('media')); // Tampilkan view detail produk
         }
+        
 }

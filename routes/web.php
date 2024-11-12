@@ -90,6 +90,7 @@ Route::get('/motivational-quotes', [MediaController::class, 'showMotivationalQuo
 Route::get('/produk', [MediaController::class, 'showProduk'])->name('produk.index');
 Route::get('/produk/{title}', [MediaController::class, 'detail'])->name('categories.detail');
 
+Route::get('/media/document/{id}', [MediaController::class, 'showDocument'])->name('media.document.show');
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::post('/login-proses', [LoginController::class, 'login_proses'])->name('login-proses');

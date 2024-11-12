@@ -50,7 +50,7 @@
                                     <th>Nama Desainer</th>
                                     <th>Deskripsi</th>
                                     <th>Tanggal Upload</th>
-                                    <th>Gambar</th>
+                                    <th>Media</th>
                                 @elseif ($category === 'promotion_videos')
                                     <th>Judul</th>
                                     <th>Thumbnail</th>
@@ -63,12 +63,13 @@
                                 @endif
                                 <th>Aksi</th>
                             </tr>
-                        </thead>
+                        </thead>            
                         <tbody>
-                            @foreach ($mediaByCategory[$category] as $item) <!-- Fetch media for the current category -->
+                            @foreach ($mediaByCategory[$category] as $item)
                             <tr data-title="{{ strtolower($item->title) }}" 
                                 data-description="{{ strtolower($item->description) }}" 
-                                data-upload-date="{{ $item->upload_date }}">
+                                data-upload-date="{{ $item->upload_date }}"
+                                data-media-type="{{ $item->image ? 'image' : 'document' }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ ucfirst(str_replace('_', ' ', $item->category)) }}</td>
                                 @if ($item->category === 'motivational_quotes')
@@ -85,16 +86,41 @@
                                     <td>
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
-                                        @endif
+                                        @ @endif
                                     </td>
                                     <td>{{ $item->upload_date }}</td>
-                                @elseif ($item->category === 'design_corner')
-                                    < <td>{{ $item->designer_name }}</td>
+                                    @elseif ($item->category === 'design_corner')
+                                    <td>{{ $item->designer_name }}</td>
                                     <td>{{ Str::limit($item->description, 50) }}</td>
                                     <td>{{ $item->upload_date }}</td>
                                     <td>
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
+                                        @elseif ($item->document)
+                                            @php
+                                                $extension = strtolower(pathinfo($item->document, PATHINFO_EXTENSION));
+                                                $icon = '';
+                                                switch ($extension) {
+                                                    case 'pdf':
+                                                        $icon = asset('images/pdf.png');
+                                                        break;
+                                                    case 'doc':
+                                                    case 'docx':
+                                                        $icon = asset('images/docx.png');
+                                                        break;
+                                                    case 'ppt':
+                                                    case 'pptx':
+                                                        $icon = asset('images/ppt.png');
+                                                        break;
+                                                    case 'xls':
+                                                    case 'xlsx':
+                                                        $icon = asset('images/xls.png');
+                                                        break;
+                                                    default:
+                                                        $icon = asset('images/document.png'); // Default icon for unknown types
+                                                }
+                                            @endphp
+                                            <img src="{{ $icon }}" alt="Ikon Dokumen" style="width: 50px; height: 50px;">
                                         @endif
                                     </td>
                                 @elseif ($item->category === 'promotion_videos')
@@ -116,7 +142,7 @@
                                     <td>{{ $item->upload_date }}</td>
                                 @endif
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal({{ $item->id }}, '{{ $item->category }}')">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal({{ $item->id }}, '{{ $item->category }}', '{{ $item->image ? 'image' : 'document' }}')">Edit</button>
                                     <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal({{ $item->id }})">Hapus</button>
                                 </td>
                             </tr>
@@ -133,29 +159,6 @@
         </div>
     </div>
 </main>
-
-<!-- Modal Edit -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="editForm" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Media</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="editModalBody">
-                    <!-- Dynamic form content will be injected here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Modal Edit -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -250,54 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function filterByDate() {
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-        const uploadDate = new Date(row.querySelector('td:nth-last-child(2)').innerText); // Ambil tanggal upload dari kolom yang sesuai
-
-        // Cek apakah uploadDate berada dalam rentang tanggal yang dipilih
-        if ((isNaN(startDate) || uploadDate >= startDate) && (isNaN(endDate) || uploadDate <= endDate)) {
-            row.style.display = ''; // Tampilkan baris jika cocok
-        } else {
-            row.style.display = 'none'; // Sembunyikan baris jika tidak cocok
-        }
-    });
-}
-
-function searchMedia() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    const rows = document.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-        const title = row.dataset.title; // Mengambil data judul
-        const description = row.dataset.description; // Mengambil data deskripsi
-
-        if (title.includes(input) || description.includes(input)) {
-            row.style.display = ''; // Tampilkan baris jika cocok
-        } else {
-            row.style.display = 'none'; // Sembunyikan baris jika tidak cocok
-        }
-    });
-}
-
-function filterByCategory() {
-    const categoryFilter = document.getElementById('categoryFilter');
-    const selectedCategory = categoryFilter.value;
-    const categoryCards = document.querySelectorAll('.category-card');
-
-    categoryCards.forEach(card => {
-        if (selectedCategory === '' || card.dataset.category === selectedCategory) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
-}
-
-function openEditModal(id, category) {
+function openEditModal(id, category, mediaType) {
     const form = document.getElementById('editForm');
     form.action = `/admin/media/${id}`; // Update action URL
     
@@ -339,24 +295,46 @@ function openEditModal(id, category) {
             </div>
         `;
     } else if (category === 'design_corner') {
-        formContent = `
-            <div class="form-group">
-                <label for="designer_name">Nama Desainer</label>
-                <input type="text" name="designer_name" class="form-control mb-2" placeholder="Nama Desainer">
-            </div>
-            <div class="form-group">
-                <label for="description">Deskripsi</label>
-                <textarea name="description" class="form-control mb -2" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="upload_date">Tanggal Desain</label>
-                <input type="date" name="upload_date" class="form-control mb-2">
-            </div>
-            <div class="form-group">
-                <label for="image">Upload Gambar</label>
-                <input type="file" name="image" accept="image/*" class="form-control mb-2">
-            </div>
-        `;
+        if (mediaType === 'image') {
+            formContent = `
+                <div class="form-group">
+                    <label for="designer_name">Nama Desainer</label>
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Deskripsi</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="upload_date">Tanggal Upload</label>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Gambar</label>
+                    <input type="file" id="image" name="image" class="form-control " accept="image/*" required onchange="previewImage(event)">
+                    <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
+                </div>
+            `;
+        } else if (mediaType === 'document') {
+            formContent = `
+                <div class="form-group">
+                    <label for="designer_name">Nama Desainer</label>
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Deskripsi</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="upload_date">Tanggal Upload</label>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" required>
+                </div>
+                <div class="form-group">
+                    <label for="document">Upload Dokumen</label>
+                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
+                </div>
+            `;
+        }
     } else if (category === 'promotion_videos') {
         formContent = `
             <div class="form-group">
@@ -365,7 +343,7 @@ function openEditModal(id, category) {
             </div>
             <div class="form-group">
                 <label for="upload_date">Tanggal Video</label>
-                <input type="date" name="upload_date" class="form-control mb-2">
+                <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
             </div>
             <div class="form-group">
                 <label for="thumbnail">Thumbnail</label>
@@ -449,7 +427,7 @@ function openDeleteModal(id) {
 
     form.onsubmit = function(event) {
         event.preventDefault();
-        const formData = new FormData(this);
+        const formData = new FormData (this);
 
         fetch(this.action, {
             method: 'POST',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motivational Quotes</title>
+    <title>Design Corner</title>
     <link rel="shortcut icon" href="/images/erlass.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Candal&display=swap" rel="stylesheet">
@@ -20,33 +20,18 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: var(--background-color);
-            background-image: url('images/background-home.png'); /* Ganti dengan URL gambar latar belakang Anda */
-            background-size: cover; /* Menutupi seluruh area */
-            background-position: center; /* Memusatkan gambar */
-            background-attachment: fixed; /* Membuat background tidak bergerak saat di-scroll */
+            background-image: url('images/background-home.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
             animation: fadeIn 1s ease-in-out;
         }
 
-                @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-                @keyframes zoomIn {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         .header h1 {
@@ -54,52 +39,111 @@
             margin: 0;
         }
 
+        .search-container input {
+            width: 100%; 
+            max-width: 150px; 
+            padding: 10px; 
+            border: 2px solid #4dcccc; 
+            border-radius: 5px; 
+            font-size: 16px; 
+            transition: border-color 0.3s ease; 
+            justify-content: center; 
+        }
+
+        .search-container input:focus {
+            outline: none; 
+            border-color: #36a8a8; 
+            box-shadow: 0 0 5px rgba(54, 168, 168, 0.5); 
+        }
+
+        .search-container input::placeholder {
+            color: #a0a0a0; 
+            opacity: 1; 
+        }
+
+        .search-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .filter-buttons button {
+            background-color: #4db6ac;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .filter-buttons button:hover {
+            background-color: #36a8a8;
+        }
+
+        .filter-select {
+            margin: 0 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #4db6ac;
+            font-size: 16px;
+            display: none; 
+        }
+
         .card {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            margin: 20px 0; /* Tambahkan margin atas dan bawah */
+            justify-content: flex-start; /* Align items to the right */
+            margin: 20px 0;
         }
 
         .media-item {
             background-color: var(--card-bg-color);
             border-radius: 10px;
-            width: 300px;
+            width: calc(20% - 30px); /* Adjusted to make cards smaller */
             margin: 15px;
-            padding: 15px;
+            padding: 10px; /* Reduced padding */
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: slideUp 0.8s ease-in-out;
-            opacity: 1; /* Pastikan tetap 1 setelah animasi */
-            visibility: visible; /* Pastikan kartu terlihat */
+            opacity: 1;
+            visibility: visible;
         }
 
         .media-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); /* Menambahkan bayangan lebih dalam saat hover */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
+
         .media-item img {
             width: 100%;
-            height: 200px; /* Tetapkan tinggi tetap untuk gambar */
-            object-fit: contain; /* Pastikan gambar tidak terpotong dan tetap dalam rasio aspeknya */
+            height: 150px; /* Reduced height */
+            object-fit: contain;
             cursor: pointer;
-            border: 2px solid #ffffff; /* Garis tepi putih pada gambar */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Bayangan gambar */
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
 
         .media-item .name {
-            font-size: 16px; /* Ukuran font lebih besar */
-            font-weight: bold; /* Membuat nama lebih menonjol */
-            margin: 10px 0 5px; /* Margin atas dan bawah untuk nama */
-            color: #222; /* Warna teks lebih gelap untuk kontras */
+            font-size: 14px; /* Reduced font size */
+            font-weight: bold;
+            margin: 5px 0 3px; /* Adjusted margins */
+            color: #222;
             font-family: "Bree Serif", serif;
         }
 
         .media-item .description {
-            font-size: 14px;
-            color: #333; /* Warna teks deskripsi lebih gelap */
-            margin-bottom: 10px; /* Menambahkan jarak bawah untuk deskripsi */
+            font-size: 12px; /* Reduced font size */
+            color: #333;
+            margin-bottom: 5px; /* Adjusted margin */
             font-family: "Bree Serif", serif;
         }
 
@@ -107,15 +151,15 @@
             display: flex;
             justify-content: end;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 5px; /* Adjusted margin */
             height: 25px;
         }
 
         .download-icon {
             color: var(--text-color);
-            font-size: 18px; /* Ukuran ikon download lebih kecil */
-            text-decoration: none; /* Menghapus garis bawah dari tautan */
-            transition: color 0.3s; /* Efek transisi saat hover */
+            font-size: 16px; /* Reduced font size */
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
         .close {
@@ -133,7 +177,6 @@
             color: #bbb;
         }
 
-        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -154,7 +197,6 @@
             object-fit: contain;
         }
 
-        /* Responsiveness */
         @media only screen and (max-width: 700px) {
             .modal-content {
                 width: 90%;
@@ -163,9 +205,9 @@
 
         .header {
             color: white; 
-            width: 90%; /* Menggunakan lebar responsif */
-            max-width: 600px; /* Lebar maksimum untuk header */
-            height: auto; /* Biarkan tinggi otomatis */
+            width: 90%;
+            max-width: 600px;
+            height: auto;
             background: #4db6ac;
             border: 1px solid rgba(0, 0, 0, 1);
             border-radius: 45px;
@@ -174,12 +216,11 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             font-family: "Candal", sans-serif;
             font-weight: 400;
-            font-style: normal;
             font-size: 2rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 20px auto; /* Margin otomatis untuk center */
+            margin: 20px auto;
             animation: slideInDown 0.8s ease-out;
             text-shadow: 
             1px 1px 0 rgba(0, 0, 0, 1),
@@ -191,10 +232,10 @@
         }
 
         .tombol-back {
-            position: absolute; /* Ubah ke fixed agar tetap di satu posisi */
-            top: 20px; /* Sesuaikan posisi atas */
-            left: 20px; /* Sesuaikan posisi kiri */
-            z-index: 100; /* Pastikan berada di atas elemen lain */
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
             animation: slideIn 1s ease-in;
         }
 
@@ -202,7 +243,7 @@
             display: inline-block;
             background-color: #4dcccc;
             border-radius: 50%;
-            padding: 10px; /* Mengurangi padding untuk responsivitas */
+            padding: 10px;
             transition: transform 0.2s ease, background-color 0.3s ease;
         }
 
@@ -212,54 +253,55 @@
         }
 
         .tombol-back img {
-            width: 50px; /* Menyesuaikan ukuran tombol back */
-            height: auto; /* Biarkan tinggi otomatis */
+            width: 50px;
+            height: auto;
         }
 
-        /* Responsiveness */
         @media only screen and (max-width: 600px) {
             .header {
-                font-size: 1.5rem; /* Ukuran font lebih kecil di layar kecil */
-                padding: 15px; /* Mengurangi padding untuk layar kecil */
+                font-size: 1.5rem;
+                padding: 15px;
             }
 
             .tombol-back img {
-                width: 40px; /* Ukuran lebih kecil untuk tombol back di layar kecil */
+                width: 40px;
             }
         }
 
         .media-badge {
-            position: absolute; /* Mengatur posisi badge */
+            position: absolute;
             top: 10px;
             left: 10px;
-            background-color: rgba(255, 165, 0, 0.8); /* Warna latar belakang badge */
+            background-color: rgba(255, 165, 0, 0.8);
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 12px;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Bayangan badge */
-            transition: transform 0.3s, opacity 0.3s; /* Tambahkan transisi untuk efek halus */
-            opacity: 0; /* Sembunyikan badge secara default */
-            visibility: hidden; /* Sembunyikan badge secara default */
+            box-shadow: 0 2px 5px rgba(0,  0, 0, 0.3);
+            transition: transform 0.3s, opacity 0.3s;
+            opacity: 0;
+            visibility: hidden;
         }
 
         .media-item:hover .media-badge {
-            opacity: 1; /* Tampilkan badge saat hover */
-            visibility: visible; /* Tampilkan badge saat hover */
-            transform: scale(1.1); /* Efek zoom saat hover */
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1.1);
         }
-                @keyframes slideUp {
+
+        @keyframes slideUp {
             0% {
                 transform: translateY(50px);
                 opacity: 0;
             }
             100% {
                 transform: translateY(0);
-                opacity: 1; /* Opacity harus 1 di akhir animasi */
+                opacity: 1;
             }
         }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -270,31 +312,16 @@
                 transform: translateX(0);
             }
         }
-        .search-container input {
-            width: 100%; /* Mengatur lebar penuh untuk .search-input dan lebar penuh untuk input dalam .search-container */
-            max-width: 150px; /* Mengatur lebar maksimum untuk input dalam .search-container */
-            padding: 10px; /* Memberikan ruang di dalam input */
-            border: 2px solid #4dcccc; /* Warna border biru */
-            border-radius: 5px; /* Membuat sudut membulat */
-            font-size: 16px; /* Ukuran font */
-            transition: border-color 0.3s ease; /* Transisi halus untuk perubahan border */
-            justify-content: center; /* Penempatan konten di tengah */
+
+        /* New styles for document separation */
+        .document-section {
+            margin: 20px 0;
         }
 
-        .search-container input:focus {
-            outline: none; /* Menghilangkan outline default */
-            border-color: #36a8a8; /* Warna border saat fokus */
-            box-shadow: 0 0 5px rgba(54, 168, 168, 0.5); /* Efek bayangan saat fokus */
-        }
-
-        .search-container input::placeholder {
-            color: #a0a0a0; /* Warna placeholder */
-            opacity: 1; /* Pastikan placeholder terlihat */
-        }
-
-        .search-container {
-            margin: 20px auto;
-            text-align: center;
+        .document-type {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -310,36 +337,133 @@
         </div>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterMediaItems()">
+            <select id="fileFormat" class="filter-select" onchange="filterDocumentsByFormat()">
+                <option value="">All Formats</option>
+                <option value="pdf">PDF</option>
+                <option value="docx">DOCX</option>
+                <option value="ppt">PPT</option>
+                <option value="xls">XLS</option>
+            </select>
+        </div>
+        <div class="filter-buttons">
+            <button onclick="showImages()">Images</button>
+            <button onclick="showDocuments()">Documents</button>
         </div>
     </header>
 
     <main>
-        <div class="card">
+        <div class="card" id="imagesCard" style="display: block;">
+            <h2>Images</h2>
             @if(isset($media) && $media->count())
                 @foreach($media as $item)
+                @if($item->image)
                 <div class="media-item">
-                    @if($item->is_new) <!-- Periksa apakah item baru -->
-                        <div class="media-badge">New</div> <!-- Badge ditampilkan jika item baru -->
+                    @if($item->is_new)
+                        <div class="media-badge">New</div>
                     @endif
-                    @if($item->image)
-                        <img src="{{ $item->image }}" alt="Image" onclick="openModal('{{ $item->image }}')">
-                    @endif
+                    <img src="{{ $item->image }}" alt="Image" onclick="openModal('{{ $item->image }}', 'image')">
                     <p class="name">{{ $item->designer_name }}</p>
                     <p class="description">{{ $item->description }}</p>
                     <div class="media-footer">
                         <a href="{{ $item->image }}" download>
-                            <img style="width: 24px; height: 24px; border: 0px; box-shadow: 0 0px 0px rgba(0, 0, 0, 0); border-radius: 0px;" src="../gif/download.gif" alt="Download" class="download-gif" id="download-gif">
+                            <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
                         </a>
                     </div>
                 </div>
+                @endif
                 @endforeach
             @else
                 <p>Tidak ada media yang tersedia.</p>
             @endif
         </div>
+    
+        <div class="document-section" id="documentsCard" style="display: none;">
+            <h2>Documents</h2>
+            <div class="document-type">Word Documents (DOC/DOCX)</div>
+            <div class="card">
+                @if(isset($media) && $media->count())
+                    @foreach($media as $item)
+                    @if($item->document && (pathinfo($item->document, PATHINFO_EXTENSION) == 'doc' || pathinfo($item->document, PATHINFO_EXTENSION) == 'docx'))
+                    <div class="media-item" data-format="{{ strtolower(pathinfo($item->document, PATHINFO_EXTENSION)) }}">
+                        @php
+                            $icon = 'images/docx.png';
+                        @endphp
+                        <img src="{{ $icon }}" alt="Document Icon" style="cursor: pointer; height: 50px; width: 50px; object-fit: cover;" onclick="openDocModal('{{ $item->document }}')">
+                        <p class="name">{{ $item->designer_name }}</p>
+                        <p class="description">{{ $item->description }}</p>
+                        <div class="media-footer">
+                            <a href="{{ $item->document }}" download>
+                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                    @endforeach
+                @else
+                    <p>Tidak ada dokumen yang tersedia.</p>
+                @endif
+            </div>
+
+            <div class="document-type">PDF Documents</div>
+            <div class="card">
+                @if(isset($media) && $media->count())
+                    @foreach($media as $item)
+                    @if($item->document && pathinfo($item->document, PATHINFO_EXTENSION) == 'pdf')
+                    <div class="media-item" data-format="pdf">
+                        <img src="images/pdf.png" alt="Document Icon" style="cursor: pointer; height: 50px; width: 50px; object-fit: cover;" onclick="openDocModal('{{ $item->document }}')">
+                        <p class="name">{{ $item->designer_name }}</p>
+                        <p class="description">{{ $item->description }}</p>
+                        <div class="media-footer">
+                            <a href="{{ $item->document }}" download>
+                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                    @endforeach
+                @else
+                    <p>Tidak ada dokumen yang tersedia.</p>
+                @endif
+            </div>
+
+            <div class="document-type">Other Documents (PPT/XLS)</div>
+            <div class="card">
+                @if(isset($media) && $media->count())
+                    @foreach($media as $item)
+                    @if($item->document && (pathinfo($item->document, PATHINFO_EXTENSION) == 'ppt' || pathinfo($item->document, PATHINFO_EXTENSION) == 'xls' || pathinfo($item->document, PATHINFO_EXTENSION) == 'xlsx'))
+                    <div class="media-item" data-format="{{ strtolower(pathinfo($item->document, PATHINFO_EXTENSION)) }}">
+                        @php
+                            $extension = strtolower(pathinfo($item->document, PATHINFO_EXTENSION));
+                            $icon = '';
+                            switch ($extension) {
+                                case 'ppt':
+                                case 'pptx':
+                                    $icon = 'images/ppt.png';
+                                    break;
+                                case 'xls':
+                                case 'xlsx':
+                                    $icon = 'images/xls.png';
+                                    break;
+                            }
+                        @endphp
+                        <img src="{{ $icon }}" alt="Document Icon" style="cursor: pointer; height: 50px; width: 50px; object-fit: cover;" onclick="openDocModal('{{ $item->document }}')">
+                        <p class="name">{{ $item->designer_name }}</p>
+                        <p class="description">{{ $item->description }}</p>
+                        <div class="media-footer">
+                            <a href="{{ $item->document }}" download>
+                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+                    @endforeach
+                @else
+                    <p>Tidak ada dokumen yang tersedia.</p>
+                @endif
+            </div>
+        </div>
     </main>
 
-    <!-- Modal -->
     <div id="myModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="imgModal">
@@ -347,10 +471,9 @@
 
     <script>
         let modalImg = document.getElementById("imgModal");
-        let zoomLevel = 1;
 
         function filterMediaItems() {
-            const input = document.getElementById('searchInput');
+            const input = document.getElementById("searchInput");
             const filter = input.value.toLowerCase();
             const mediaItems = document.querySelectorAll('.media-item');
 
@@ -364,6 +487,37 @@
                     item.style.display = "none"; // Hide item
                 }
             });
+        }
+
+        function filterDocumentsByFormat() {
+            const selectedFormat = document.getElementById("fileFormat").value;
+            const mediaItems = document.querySelectorAll('#documentsCard .media-item');
+
+            mediaItems.forEach(item => {
+                const format = item.getAttribute('data-format');
+                if (selectedFormat === "" || format === selectedFormat) {
+                    item.style.display = ""; // Show item
+                } else {
+                    item.style.display = "none"; // Hide item
+                }
+            });
+        }
+
+        function showImages() {
+            document.getElementById('imagesCard').style.display = 'block';
+            document.getElementById('documentsCard').style.display = 'none'; // Hide documents
+            document.getElementById('fileFormat').style.display = 'none'; // Hide format dropdown
+            document.getElementById('searchInput').value = ''; // Reset search input
+            filterMediaItems(); // Show all images
+        }
+
+        function showDocuments() {
+            document.getElementById('imagesCard').style.display = 'none'; // Hide images
+            document.getElementById('documentsCard').style.display = 'block'; // Show documents
+            document.getElementById('fileFormat').style.display = 'inline-block'; // Show format dropdown
+            document.getElementById('searchInput').value = ''; // Reset search input
+            filterMediaItems(); // Show all documents
+            filterDocumentsByFormat(); // Reset document filter
         }
 
         function openModal(imageSrc) {
@@ -428,7 +582,13 @@
         window.addEventListener('resize', function() {
             if (modalImg.src) {
                 adjustImageSize(modalImg);
-            } });
+            }
+        });
+
+        // Call showImages on page load to display both cards
+        window.onload = function() {
+            showImages();
+        };
     </script>
 </body>
 </html>

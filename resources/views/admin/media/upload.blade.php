@@ -78,76 +78,68 @@
             formContent = `
                 <div class="form-group">
                     <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
                 </div>
                 <div class="form-group">
                     <label for="quote">Quotes</label>
-                    <textarea name="quote" class="form-control" rows="3" required></textarea>
+                    <textarea id="quote" name="quote" class="form-control" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}" readonly required>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
                 </div>
             `;
         } else if (category === 'alat_promosi_internal') {
             formContent = `
                 <div class="form-group">
                     <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="title">Judul</label>
-                    <input type="text" name="title" class="form-control" required>
+                    <input type="text" id="title" name="title" class="form-control" required>
                 </div>
-                <div class="form-group ">
+                <div class="form-group">
                     <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
                 </div>
                 <div class="form-group">
                     <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}" readonly required>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
                 </div>
             `;
         } else if (category === 'design_corner') {
             formContent = `
                 <div class="form-group">
-                    <label for="designer_name">Nama Desainer</label>
-                    <input type="text" name="designer_name" class="form-control" required>
+                    <label for="upload_type">Pilih Jenis Upload</label>
+                    <select id="upload_type" name="upload_type" class="form-control" required onchange="showDesignForm(this.value)">
+                        <option value="" disabled selected>Pilih Jenis Upload</option>
+                        <option value="image">Gambar</option>
+                        <option value="document">Dokumen</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}" readonly required>
-                </div>
-                <div class="form-group">
-                    <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
-                    <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
-                </div>
+                <div id="design-form-content"></div>
             `;
         } else if (category === 'promotion_videos') {
             formContent = `
                 <div class="form-group">
                     <label for="video_title">Judul</label>
-                    <input type="text" name="video_title" class="form-control" required>
+                    <input type="text" id="video_title" name="video_title" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}" readonly required>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
                 </div>
                 <div class="form-group">
                     <label for="thumbnail">Upload Thumbnail</label>
-                    <input type="file" name="thumbnail" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                    <input type="file" id="thumbnail" name="thumbnail" class="form-control" accept="image/*" required onchange="previewImage(event)">
                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
                 </div>
                 <div class="form-group">
                     <label for="media">Upload Video</label>
-                    <input type="file" name="media" class="form-control" accept="video/*" required onchange="previewVideo(event)">
+                    <input type="file" id="media" name="media" class="form-control" accept="video/*" required onchange="previewVideo(event)">
                     <video id="videoPreview" controls style="display:none; width: 200px; margin-top: 10px;">
                         <source id="videoSource" src="#" type="video/mp4">
                         Your browser does not support the video tag.
@@ -158,25 +150,73 @@
             formContent = `
                 <div class="form-group">
                     <label for="title">Nama Produk</label>
-                    <input type="text" name="title" class="form-control" required>
+                    <input type="text" id="title" name="title" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="image">Upload Gambar Produk</label>
-                    <input type="file" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*" required onchange="previewImage(event)">
                     <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
                 </div>
                 <div class="form-group">
                     <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}" readonly required>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
                 </div>
                 <div class="form-group">
                     <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
                 </div>
             `;
         }
 
         document.getElementById('form-content').innerHTML = formContent;
+    }
+
+    function showDesignForm(uploadType) {
+        const today = new Date().toISOString().split('T')[0];
+        let designFormContent = '';
+
+        if (uploadType === 'image') {
+            designFormContent = `
+                <div class="form-group">
+                    <label for="designer_name">Nama Desainer</label>
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Deskripsi</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="upload_date">Tanggal Upload</label>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Gambar</label>
+                    <input type="file" id="image" name="image" class="form-control " accept="image/*" required onchange="previewImage(event)">
+                    <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
+                </div>
+            `;
+        } else if (uploadType === 'document') {
+            designFormContent = `
+                <div class="form-group">
+                    <label for="designer_name">Nama Desainer</label>
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Deskripsi</label>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="upload_date">Tanggal Upload</label>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="document">Upload Dokumen</label>
+                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
+                </div>
+            `;
+        }
+
+        document.getElementById('design-form-content').innerHTML = designFormContent;
     }
 
     function previewImage(event) {

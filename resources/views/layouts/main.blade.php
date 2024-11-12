@@ -31,6 +31,12 @@
     color: #007bff; /* Ubah warna ikon saat hover */
 }
 
+#loadingIndicator {
+    font-weight: bold;
+    color: #007bff; /* Bootstrap primary color */
+    margin-top: 10px;
+}
+
 </style>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
     <div class="app-wrapper"> <!--begin::Header-->

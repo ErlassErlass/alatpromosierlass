@@ -50,7 +50,7 @@
                                     <th>Nama Desainer</th>
                                     <th>Deskripsi</th>
                                     <th>Tanggal Upload</th>
-                                    <th>Gambar</th>
+                                    <th>Media</th>
                                 @elseif ($category === 'promotion_videos')
                                     <th>Judul</th>
                                     <th>Thumbnail</th>
@@ -63,12 +63,13 @@
                                 @endif
                                 <th>Aksi</th>
                             </tr>
-                        </thead>
+                        </thead>            
                         <tbody>
-                            @foreach ($mediaByCategory[$category] as $item) <!-- Fetch media for the current category -->
+                            @foreach ($mediaByCategory[$category] as $item)
                             <tr data-title="{{ strtolower($item->title) }}" 
                                 data-description="{{ strtolower($item->description) }}" 
-                                data-upload-date="{{ $item->upload_date }}">
+                                data-upload-date="{{ $item->upload_date }}"
+                                data-media-type="{{ $item->image ? 'image' : 'document' }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ ucfirst(str_replace('_', ' ', $item->category)) }}</td>
                                 @if ($item->category === 'motivational_quotes')
@@ -85,16 +86,41 @@
                                     <td>
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
-                                        @endif
+                                        @ @endif
                                     </td>
                                     <td>{{ $item->upload_date }}</td>
-                                @elseif ($item->category === 'design_corner')
-                                    < <td>{{ $item->designer_name }}</td>
+                                    @elseif ($item->category === 'design_corner')
+                                    <td>{{ $item->designer_name }}</td>
                                     <td>{{ Str::limit($item->description, 50) }}</td>
                                     <td>{{ $item->upload_date }}</td>
                                     <td>
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
+                                        @elseif ($item->document)
+                                            @php
+                                                $extension = strtolower(pathinfo($item->document, PATHINFO_EXTENSION));
+                                                $icon = '';
+                                                switch ($extension) {
+                                                    case 'pdf':
+                                                        $icon = asset('images/pdf.png');
+                                                        break;
+                                                    case 'doc':
+                                                    case 'docx':
+                                                        $icon = asset('images/docx.png');
+                                                        break;
+                                                    case 'ppt':
+                                                    case 'pptx':
+                                                        $icon = asset('images/ppt.png');
+                                                        break;
+                                                    case 'xls':
+                                                    case 'xlsx':
+                                                        $icon = asset('images/xls.png');
+                                                        break;
+                                                    default:
+                                                        $icon = asset('images/document.png'); // Default icon for unknown types
+                                                }
+                                            @endphp
+                                            <img src="{{ $icon }}" alt="Ikon Dokumen" style="width: 50px; height: 50px;">
                                         @endif
                                     </td>
                                 @elseif ($item->category === 'promotion_videos')
@@ -116,7 +142,7 @@
                                     <td>{{ $item->upload_date }}</td>
                                 @endif
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal({{ $item->id }}, '{{ $item->category }}')">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="openEditModal({{ $item->id }}, '{{ $item->category }}', '{{ $item->image ? 'image' : 'document' }}')">Edit</button>
                                     <button type="button" class="btn btn-sm btn-danger" onclick="openDeleteModal({{ $item->id }})">Hapus</button>
                                 </td>
                             </tr>
@@ -181,7 +207,6 @@
 </div>
 
 <script>
-
 const itemsPerPage = 5; // Set the number of items per page
 
 function changePage(category, direction) {
@@ -227,154 +252,131 @@ document.addEventListener('DOMContentLoaded', () => {
         changePage(category, 0); // Show the first page or the stored page
     });
 });
-        function filterByDate() {
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
-    const rows = document.querySelectorAll('tbody tr');
 
-    rows.forEach(row => {
-        const uploadDate = new Date(row.querySelector('td:nth-last-child(2)').innerText); // Ambil tanggal upload dari kolom yang sesuai
-
-        // Cek apakah uploadDate berada dalam rentang tanggal yang dipilih
-        if ((isNaN(startDate) || uploadDate >= startDate) && (isNaN(endDate) || uploadDate <= endDate)) {
-            row.style.display = ''; // Tampilkan baris jika cocok
-        } else {
-            row.style.display = 'none'; // Sembunyikan baris jika tidak cocok
-        }
-    });
-}
-    function searchMedia() {
-        const input = document.getElementById('searchInput').value.toLowerCase();
-        const rows = document.querySelectorAll('tbody tr');
+function openEditModal(id, category, mediaType) {
+    const form = document.getElementById('editForm');
+    form.action = `/petugas/media/${id}`; // Update action URL
     
-        rows.forEach(row => {
-            const title = row.dataset.title; // Mengambil data judul
-            const description = row.dataset.description; // Mengambil data deskripsi
+    const today = new Date().toISOString().split('T')[0];
     
-            if (title.includes(input) || description.includes(input)) {
-                row.style.display = ''; // Tampilkan baris jika cocok
-            } else {
-                row.style.display = 'none'; // Sembunyikan baris jika tidak cocok
-            }
-        });
-    }
-        function filterByCategory() {
-        const categoryFilter = document.getElementById('categoryFilter');
-        const selectedCategory = categoryFilter.value;
-        const categoryCards = document.querySelectorAll('.category-card');
-    
-        categoryCards.forEach(card => {
-            if (selectedCategory === '' || card.dataset.category === selectedCategory) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
-    function openEditModal(id, category) {
-        const form = document.getElementById('editForm');
-        form.action = `/petugas/media/${id}`; // Update action URL
-        
-        // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
-        const today = new Date().toISOString().split('T')[0];
-        
-        let formContent = '';
-        if (category === 'motivational_quotes') {
-            formContent = `
-                <div class="form-group">
-                    <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" accept="image/*" class="form-control mb-2">
-                </div>
-                <div class="form-group">
-                    <label for="quote">Quotes</label>
-                    <textarea name="quote" class="form-control" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
-                </div>
-            `;
-        } else if (category === 'alat_promosi_internal') {
-            formContent = `
-                <div class="form-group">
-                    <label for="title">Judul</label>
-                    <input type="text " name="title" class="form-control mb-2" placeholder="Judul">
-                </div>
-                <div class="form-group">
-                    <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control mb-2" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" accept="image/*" class="form-control mb-2">
-                </div>
-                <div class="form-group">
-                    <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
-                </div>
-            `;
-        } else if (category === 'design_corner') {
+    let formContent = '';
+    if (category === 'motivational_quotes') {
+        formContent = `
+            <div class="form-group">
+                <label for="image">Upload Gambar</label>
+                <input type="file" name="image" accept="image/*" class="form-control mb-2">
+            </div>
+            <div class="form-group">
+                <label for="quote">Quotes</label>
+                <textarea name="quote" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="upload_date">Tanggal Upload</label>
+                <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
+            </div>
+        `;
+    } else if (category === 'alat_promosi_internal') {
+        formContent = `
+            <div class="form-group">
+                <label for="title">Judul</label>
+                <input type="text" name="title" class="form-control mb-2" placeholder="Judul">
+            </div>
+            <div class="form-group">
+                <label for="description">Deskripsi</label>
+                <textarea name="description" class="form-control mb-2" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Gambar</label>
+                <input type="file" name="image" accept="image/*" class="form-control mb-2">
+            </div>
+            <div class="form-group">
+                <label for="upload_date">Tanggal Upload</label>
+                <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
+            </div>
+        `;
+    } else if (category === 'design_corner') {
+        if (mediaType === 'image') {
             formContent = `
                 <div class="form-group">
                     <label for="designer_name">Nama Desainer</label>
-                    <input type="text" name="designer_name" class="form-control mb-2" placeholder="Nama Desainer">
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control mb-2" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="upload_date">Tanggal Desain</label>
-                    <input type="date" name="upload_date" class="form-control mb-2">
-                </div>
-                <div class="form-group">
-                    <label for="image">Upload Gambar</label>
-                    <input type="file" name="image" accept="image/*" class="form-control mb-2">
-                </div>
-            `;
-        } else if (category === 'promotion_videos') {
-            formContent = `
-                <div class="form-group">
-                    <label for="video_title">Judul Video</label>
-                    <input type="text" name="video_title" class="form-control mb-2" placeholder="Judul Video">
-                </div>
-                <div class="form-group">
-                    <label for="upload_date">Tanggal Video</label>
-                    <input type="date" name="upload_date" class="form-control mb-2">
-                </div>
-                <div class="form-group">
-                    <label for="thumbnail">Thumbnail</label>
-                    <input type="file" name="thumbnail" accept="image/*" class="form-control mb-2">
-                </div>
-                <div class="form-group">
-                    <label for="media">Upload Video</label>
-                    <input type="file" name="media" accept="video/*" class="form-control mb-2">
-                </div>
-            `;
-        } else if (category === 'produk') {
-            formContent = `
-                <div class="form-group">
-                    <label for="title">Nama Produk</label>
-                    <input type="text" name="title" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="image">Upload Gambar Produk</label>
-                    <input type="file" name="image" class="form-control" accept="image/*">
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="upload_date">Tanggal Upload</label>
-                    <input type="date" name="upload_date" class="form-control" value="${today}">
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Upload Gambar</label>
+                    <input type="file" id="image" name="image" class="form-control " accept="image/*" required onchange="previewImage(event)">
+                    <img id="imagePreview" src="#" alt="Pratinjau Gambar" style="display:none; width: 200px; margin-top: 10px;"/>
+                </div>
+            `;
+        } else if (mediaType === 'document') {
+            formContent = `
+                <div class="form-group">
+                    <label for="designer_name">Nama Desainer</label>
+                    <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Deskripsi</label>
-                    <textarea name="description" class="form-control" rows="3"></textarea>
+                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="upload_date">Tanggal Upload</label>
+                    <input type="date" id="upload_date" name="upload_date" class="form-control" value="${today}" required>
+                </div>
+                <div class="form-group">
+                    <label for="document">Upload Dokumen</label>
+                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
                 </div>
             `;
         }
-        document.getElementById('editModalBody').innerHTML = formContent;
-        
-        // Tambahkan event listener untuk form edit
-        document.getElementById('editForm').addEventListener('submit', function(event) {
+    } else if (category === 'promotion_videos') {
+        formContent = `
+            <div class="form-group">
+                <label for="video_title">Judul Video</label>
+                <input type="text" name="video_title" class="form-control mb-2" placeholder="Judul Video">
+            </div>
+            <div class="form-group">
+                <label for="upload_date">Tanggal Video</label>
+                <input type="date" name="upload_date" class="form-control mb-2" value="${today}">
+            </div>
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail</label>
+                <input type="file" name="thumbnail" accept="image/*" class="form-control mb-2">
+            </div>
+            <div class="form-group">
+                <label for="media">Upload Video</label>
+                <input type="file" name="media" accept="video/*" class="form-control mb-2">
+            </div>
+        `;
+    } else if (category === 'produk') {
+        formContent = `
+            <div class="form-group">
+                <label for="title">Nama Produk</label>
+                <input type="text" name="title" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Gambar Produk</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="upload_date">Tanggal Upload</label>
+                <input type="date" name="upload_date" class="form-control" value="${today}">
+            </div>
+            <div class="form-group">
+                <label for="description">Deskripsi</label>
+                <textarea name="description" class="form-control" rows="3"></textarea>
+            </div>
+        `;
+    }
+    document.getElementById('editModalBody').innerHTML = formContent;
+
+    document.getElementById('editForm').addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(this);
         fetch(this.action, {
@@ -415,53 +417,52 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-        
-        new bootstrap.Modal(document.getElementById('editModal')).show();
-    }
-    function openDeleteModal(id) {
-        const form = document.getElementById('deleteForm');
-        form.action = `/petugas/media/${id}`;
-        
-        // Tambahkan event listener untuk form delete
-        form.onsubmit = function(event) {
-            event.preventDefault(); // Mencegah pengiriman form secara default
-            const formData = new FormData(this);
-            
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: 'Media berhasil dihapus!',
-                    }).then(() => {
-                        // Muat ulang halaman untuk memperbarui data
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal!',
-                        text: 'Terjadi kesalahan saat menghapus media.',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error(error);
+
+    new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+
+function openDeleteModal(id) {
+    const form = document.getElementById('deleteForm');
+    form.action = `/petugas/media/${id}`;
+
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        const formData = new FormData (this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Media berhasil dihapus!',
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal!',
                     text: 'Terjadi kesalahan saat menghapus media.',
                 });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: 'Terjadi kesalahan saat menghapus media.',
             });
-        };
-    
-        new bootstrap.Modal(document.getElementById('deleteModal')).show();
-    }
-    </script>
+        });
+    };
+
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
 
 @endsection
