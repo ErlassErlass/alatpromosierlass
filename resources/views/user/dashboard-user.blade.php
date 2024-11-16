@@ -153,7 +153,6 @@
             display: block;
         }
         .hero_area {
-            flex: 1; /* Membuat hero_area mengisi ruang yang tersisa */
             padding: 20px;
             text-align: center;
             margin-bottom: 10px;
@@ -173,7 +172,6 @@
             font-family: "Candal", sans-serif;
             font-weight: bold;
             font-size: 64px;
-            opacity: 1;
             margin-top: 100px; /* Tambahkan jarak antara logo dan judul */
         }
 
@@ -182,7 +180,6 @@
             font-family: "Candal", sans-serif;
             font-weight: bold;
             font-size: 25px;
-            opacity: 1;
             margin-top: 10px; /* Tambahkan jarak antara judul dan subjudul */
         }
 
@@ -319,36 +316,55 @@
             }
         }
 
+        @keyframes lift {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .lift {
+            transition: transform 0.3s ease;
+        }
+
+        .lift:hover {
+            transform: translateY(-5px);
+        }
+
         footer {
-            background-color: #63c0f2; /* Warna biru transparan */
-            padding: 20px; /* Tambahkan padding untuk ruang di sekitar teks */
+            background-color: #63c0f2;
+            padding: 20px;
             text-align: center;
             color: white;
-            animation: fadeIn 0.8s ease-in-out;
-            margin-top: auto; /* Mengatur margin atas footer agar tetap di bawah */
-            display: flex; /* Gunakan flexbox untuk footer */
-            justify-content: center; /* Pusatkan konten */
-            align-items: center; /* Pusatkan konten secara vertikal */
-            flex-direction: column; /* Atur konten menjadi kolom */
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         .copyright p {
             font-family: "Candal", sans-serif;
             font-weight: bold;
-            font-size: 24px; /* Ukuran font default */
-            margin: 0; /* Hapus margin default */
+            font-size: 24px;
+            margin: 0;
         }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .copyright p {
-                font-size: 18px; /* Ukuran font untuk layar kecil */
+                font-size: 18px;
             }
         }
 
         @media (max-width: 480px) {
             .copyright p {
-                font-size: 16px; /* Ukuran font untuk layar ekstra kecil */
+                font-size: 16px;
             }
         }
     </style>
@@ -360,8 +376,8 @@
             <img id="right-image" src="images/coding.png" alt="Logo kanan" />
             <img id="left-image" src="images/erlass.png" alt="Logo Kiri" />
         </div>
-        <h1>Alat Promosi Erlass 2024</h1>
-        <h3>Marketing Komunikasi Nasional Erlass Prokreatif Indonesia 2024</h3>
+        <h1 id="title">Alat Promosi Erlass 2024</h1>
+        <h3 id="subtitle">Marketing Komunikasi Nasional Erlass Prokreatif Indonesia 2024</h3>
 
         <!-- Category Section -->
         <section class="category_section">
@@ -449,5 +465,43 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const title = document.getElementById('title');
+            const subtitle = document.getElementById('subtitle');
+
+            wrapLetters(title);
+            wrapLetters(subtitle);
+        });
+
+        function wrapLetters(element) {
+            const text = element.innerText;
+            element.innerHTML = text.split(' ').map(word => {
+                return word.split('').map(letter => `<span>${letter}</span>`).join('') + ' '; // Preserve spaces
+            }).join(''); // Maintain spaces between words
+        }
+
+        // Function to add the lift class
+        function addLiftClass(event) {
+            event.target.classList.add('lift');
+        }
+
+        // Function to remove the lift class
+        function removeLiftClass(event) {
+            event.target.classList.remove('lift');
+        }
+
+        // Select the elements you want to apply the effect to
+        const title = document.querySelector('.hero_area h1');
+        const subtitle = document.querySelector('.hero_area h3');
+
+        // Add event listeners for mouse enter and leave
+        title.addEventListener('mouseenter', addLiftClass);
+        title.addEventListener('mouseleave', removeLiftClass);
+        
+        subtitle.addEventListener('mouseenter', addLiftClass);
+        subtitle.addEventListener('mouseleave', removeLiftClass);
+    </script>
 </body>
 </html>

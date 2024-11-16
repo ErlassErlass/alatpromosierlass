@@ -99,15 +99,15 @@
 
         .card {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start; /* Align items to the right */
+            flex-wrap: wrap; /* Allow items to wrap */
+            justify-content: flex-start; /* Align items to the start */
             margin: 20px 0;
         }
 
         .media-item {
             background-color: var(--card-bg-color);
             border-radius: 10px;
-            width: calc(20% - 30px); /* Adjusted to make cards smaller */
+            width: calc(25% - 30px); /* Default to 4 items per row */
             margin: 15px;
             padding: 10px; /* Reduced padding */
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -115,6 +115,25 @@
             animation: slideUp 0.8s ease-in-out;
             opacity: 1;
             visibility: visible;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .media-item {
+                width: calc(33.33% - 30px); /* 3 items per row */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .media-item {
+                width: calc(50% - 30px); /* 2 items per row */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .media-item {
+                width: calc(100% - 30px); /* 1 item per row */
+            }
         }
 
         .media-item:hover {
@@ -336,8 +355,8 @@
             <h1>Design Corner</h1>
         </div>
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterMediaItems()">
-            <select id="fileFormat" class="filter-select" onchange="filterDocumentsByFormat()">
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterDocuments()">
+            <select id="fileFormat" class="filter-select" onchange="filterDocuments()">
                 <option value="">All Formats</option>
                 <option value="pdf">PDF</option>
                 <option value="docx">DOCX</option>
@@ -352,8 +371,7 @@
     </header>
 
     <main>
-        <div class="card" id="imagesCard" style="display: block;">
-            <h2>Images</h2>
+        <div class="card" id="imagesCard">
             @if(isset($media) && $media->count())
                 @foreach($media as $item)
                 @if($item->image)
@@ -366,7 +384,7 @@
                     <p class="description">{{ $item->description }}</p>
                     <div class="media-footer">
                         <a href="{{ $item->image }}" download>
-                            <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                            <img style="width: 24px; height: 24px; border: 0px;" src="../gif/download.gif" alt="Download" class="download-gif">
                         </a>
                     </div>
                 </div>
@@ -378,7 +396,6 @@
         </div>
     
         <div class="document-section" id="documentsCard" style="display: none;">
-            <h2>Documents</h2>
             <div class="document-type">Word Documents (DOC/DOCX)</div>
             <div class="card">
                 @if(isset($media) && $media->count())
@@ -393,7 +410,7 @@
                         <p class="description">{{ $item->description }}</p>
                         <div class="media-footer">
                             <a href="{{ $item->document }}" download>
-                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                                <img style="width: 24px; height: 24px; border: 0px;" src="../gif/download.gif" alt="Download" class="download-gif">
                             </a>
                         </div>
                     </div>
@@ -415,7 +432,7 @@
                         <p class="description">{{ $item->description }}</p>
                         <div class="media-footer">
                             <a href="{{ $item->document }}" download>
-                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                                <img style="width: 24px; height: 24px; border: 0px;" src="../gif/download.gif" alt="Download" class="download-gif">
                             </a>
                         </div>
                     </div>
@@ -451,7 +468,7 @@
                         <p class="description">{{ $item->description }}</p>
                         <div class="media-footer">
                             <a href="{{ $item->document }}" download>
-                                <img style="width: 24px; height: 24px;" src="../gif/download.gif" alt="Download" class="download-gif">
+                                <img style="width: 24px; height: 24px; border: 0px;" src="../gif/download.gif" alt="Download" class="download-gif">
                             </a>
                         </div>
                     </div>
@@ -489,22 +506,35 @@
             });
         }
 
-        function filterDocumentsByFormat() {
-            const selectedFormat = document.getElementById("fileFormat").value;
-            const mediaItems = document.querySelectorAll('#documentsCard .media-item');
+        function filterDocuments() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const selectedFormat = document.getElementById("fileFormat").value;
+    const mediaItems = document.querySelectorAll('#documentsCard .media-item');
 
-            mediaItems.forEach(item => {
-                const format = item.getAttribute('data-format');
-                if (selectedFormat === "" || format === selectedFormat) {
-                    item.style.display = ""; // Show item
-                } else {
-                    item.style.display = "none"; // Hide item
-                }
-            });
+    mediaItems.forEach(item => {
+        const title = item.querySelector('.name').textContent.toLowerCase();
+        const format = item.getAttribute('data-format');
+
+        // Check if the title includes the search input and if the format matches
+        const matchesSearch = title.includes(searchInput);
+        const matchesFormat = selectedFormat === "" || format === selectedFormat;
+
+        if (matchesSearch && matchesFormat) {
+            item.style.display = ""; // Show item
+        } else {
+            item.style.display = "none"; // Hide item
         }
+    });
+}
+
+// Call this function when the search input changes
+document.getElementById("searchInput").addEventListener("keyup", filterDocuments);
+
+// Call this function when the format dropdown changes
+document.getElementById("fileFormat").addEventListener("change", filterDocuments);
 
         function showImages() {
-            document.getElementById('imagesCard').style.display = 'block';
+            document.getElementById('imagesCard').style.display = 'flex';
             document.getElementById('documentsCard').style.display = 'none'; // Hide documents
             document.getElementById('fileFormat').style.display = 'none'; // Hide format dropdown
             document.getElementById('searchInput').value = ''; // Reset search input
