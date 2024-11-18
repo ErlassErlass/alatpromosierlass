@@ -62,8 +62,9 @@
         }
 
         .header {
-            width: 65%;
-            height: 55px;
+            width: 100%;
+            max-width: 800px; /* Maksimal lebar header */
+            height: auto;
             background: var(--header-bg-color, #4fc3f7);
             border-radius: 45px;
             border: 1px solid rgba(0, 0, 0, 1);
@@ -73,8 +74,7 @@
             margin: 20px auto 30px;
             font-family: "Candal", sans-serif;
             font-weight: 400;
-            font-style: normal;
-            color: white; /* Mengubah warna teks menjadi putih */
+            color: white;
             text-shadow: 
             1px 1px 0 rgba(0, 0, 0, 1),
             -1px -1px 0 rgba(0, 0, 0, 1),
@@ -93,22 +93,24 @@
         }
 
         .text-container {
-            display: flex;
-            align-items: flex-start;
+            display : flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
             background-color: var(--card-bg-color);
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             max-width: 1200px;
+            width: 100%; /* Memastikan lebar 100% untuk responsivitas */
             flex-wrap: wrap;
             position: relative;
         }
 
         .text-container img {
-            max-width: 400px;
-            width: 100%;
+            max-width: 100%; /* Memastikan gambar responsif */
+            height: auto;
             border-radius: 10px;
-            margin-right: 20px;
+            margin: 10px 0; /* Menambahkan margin untuk jarak */
         }
 
         .text-container div {
@@ -124,19 +126,18 @@
             line-height: 1.8;
             color: var(--text-color);
             margin-top: 10px;
+            font-family: "Bree Serif", serif;
         }
 
-        /* Gambar Download */
         .download-gif {
-            position: absolute; /* Posisi absolute untuk menempatkan gambar di pojok */
-            bottom: 20px; /* Jarak dari bawah */
-            right: 20px; /* Jarak dari kanan */
-            width: 50px; /* Ukuran lebar gambar */
-            height: auto; /* Otomatis menjaga proporsi */
-            cursor: pointer; /* Menambahkan kursor pointer */
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: auto;
+            cursor: pointer;
         }
 
-        /* Keyframe untuk animasi slide-in */
         @keyframes slideIn {
             from {
                 transform: translateX(-100px);
@@ -145,6 +146,35 @@
             to {
                 transform: translateX(0);
                 opacity: 1;
+            }
+        }
+
+        /* Media Queries untuk responsivitas */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 24px; /* Mengubah ukuran font untuk layar kecil */
+            }
+
+            .text-container {
+                flex-direction: column; /* Mengubah arah flex untuk layar kecil */
+            }
+
+            .text-container img {
+                margin: 0; /* Menghapus margin untuk gambar di layar kecil */
+            }
+
+            .download-gif {
+                width: 40px; /* Mengubah ukuran gambar download di layar kecil */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                font-size: 20px; /* Ukuran font lebih kecil untuk layar sangat kecil */
+            }
+
+            .text-container p {
+                font-size: 18px; /* Mengubah ukuran font paragraf */
             }
         }
     </style>
@@ -174,30 +204,24 @@
 
     <script>
 function downloadContent() {
-    const content = document.querySelector('.text-container'); // Pilih elemen yang ingin di-capture
+    const content = document.querySelector('.text-container');
 
-    // Sembunyikan gambar download sebelum di-capture
     const downloadImage = document.querySelector('.download-gif');
     downloadImage.style.display = 'none';
 
-    // Simpan background dari body untuk diatur sementara
     const originalBodyBackgroundColor = document.body.style.backgroundColor;
     document.body.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
 
     html2canvas(content, { willReadFrequently: true }).then(canvas => {
         const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png'); // Ubah canvas ke format gambar
-        link.download = 'media_detail.png'; // Nama file yang akan diunduh
-        link.click(); // Simulasikan klik pada link untuk memulai unduhan
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'media_detail.png';
+        link.click();
 
-        // Kembalikan background body ke semula
         document.body.style.backgroundColor = originalBodyBackgroundColor;
-
-        // Tampilkan kembali gambar download
         downloadImage.style.display = 'block';
     }).catch(err => {
         console.error('Terjadi kesalahan saat mendownload:', err);
-        // Tampilkan kembali gambar download jika terjadi kesalahan
         downloadImage.style.display = 'block';
     });
 }

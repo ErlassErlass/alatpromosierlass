@@ -89,8 +89,7 @@
             font-size: 22px; /* Ukuran font lebih besar */
             font-weight: bold; /* Membuat nama lebih menonjol */
             margin: 10px 0 5px; /* Margin atas dan bawah untuk nama */
-            color: #222; /* Warna teks lebih gelap untuk kontras */
-            font-family: "Bree Serif", serif;
+            color: white; /* Warna teks lebih gelap untuk kontras */
         }
 
         .media-item .description {

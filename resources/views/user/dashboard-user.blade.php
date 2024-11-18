@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Candal&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
 
     <style>
         /* Bootstrap core CSS */
@@ -266,6 +267,8 @@
             color: #333;
             font-weight: 600;
             transition: color 0.3s ease;
+            font-family: "Bree Serif", serif;
+            font-size: 22px; /* Ukuran font lebih besar */
         }
 
         .box:hover .detail-box h5 {

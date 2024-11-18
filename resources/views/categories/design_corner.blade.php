@@ -82,6 +82,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             font-size: 16px;
+            font-family: "Bree Serif", serif;
         }
 
         .filter-buttons button:hover {
@@ -95,6 +96,7 @@
             border: 1px solid #4db6ac;
             font-size: 16px;
             display: none; 
+            font-family: "Bree Serif", serif;
         }
 
         .card {
@@ -103,8 +105,26 @@
             justify-content: flex-start; /* Align items to the start */
             margin: 20px 0;
         }
+        .card-images {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap */
+            justify-content: flex-start; /* Align items to the start */
+            margin: 20px 0;
+        }
 
         .media-item {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            width: calc(8% - 30px); /* Default to 4 items per row */
+            margin: 15px;
+            padding: 10px; /* Reduced padding */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.8s ease-in-out;
+            opacity: 1;
+            visibility: visible;
+        }
+        .media-item-images {
             background-color: var(--card-bg-color);
             border-radius: 10px;
             width: calc(25% - 30px); /* Default to 4 items per row */
@@ -135,13 +155,43 @@
                 width: calc(100% - 30px); /* 1 item per row */
             }
         }
+        @media (max-width: 1200px) {
+            .media-item-images {
+                width: calc(33.33% - 30px); /* 3 items per row */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .media-item-images {
+                width: calc(50% - 30px); /* 2 items per row */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .media-item-images {
+                width: calc(100% - 30px); /* 1 item per row */
+            }
+        }
 
         .media-item:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
+        .media-item-images:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
 
         .media-item img {
+            width: 100%;
+            height: 150px; /* Reduced height */
+            object-fit: contain;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .media-item-images img {
             width: 100%;
             height: 150px; /* Reduced height */
             object-fit: contain;
@@ -158,6 +208,13 @@
             color: #222;
             font-family: "Bree Serif", serif;
         }
+        .media-item-images .name {
+            font-size: 14px; /* Reduced font size */
+            font-weight: bold;
+            margin: 5px 0 3px; /* Adjusted margins */
+            color: #222;
+            font-family: "Bree Serif", serif;
+        }
 
         .media-item .description {
             font-size: 12px; /* Reduced font size */
@@ -165,8 +222,21 @@
             margin-bottom: 5px; /* Adjusted margin */
             font-family: "Bree Serif", serif;
         }
+        .media-item-images .description {
+            font-size: 12px; /* Reduced font size */
+            color: #333;
+            margin-bottom: 5px; /* Adjusted margin */
+            font-family: "Bree Serif", serif;
+        }
 
         .media-footer {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            margin-top: 5px; /* Adjusted margin */
+            height: 25px;
+        }
+        .media-footer-images {
             display: flex;
             justify-content: end;
             align-items: center;
@@ -338,9 +408,10 @@
         }
 
         .document-type {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 10px 0;
+            font-family: "Bree Serif", serif;
+            font-weight: bold; 
+            font-size: 30px;
+            margin: 10px 17px;
         }
     </style>
 </head>
@@ -371,18 +442,18 @@
     </header>
 
     <main>
-        <div class="card" id="imagesCard">
+        <div class="card-images" id="imagesCard">
             @if(isset($media) && $media->count())
                 @foreach($media as $item)
                 @if($item->image)
-                <div class="media-item">
+                <div class="media-item-images">
                     @if($item->is_new)
                         <div class="media-badge">New</div>
                     @endif
                     <img src="{{ $item->image }}" alt="Image" onclick="openModal('{{ $item->image }}', 'image')">
                     <p class="name">{{ $item->designer_name }}</p>
                     <p class="description">{{ $item->description }}</p>
-                    <div class="media-footer">
+                    <div class="media-footer-images">
                         <a href="{{ $item->image }}" download>
                             <img style="width: 24px; height: 24px; border: 0px;" src="../gif/download.gif" alt="Download" class="download-gif">
                         </a>
@@ -397,7 +468,7 @@
     
         <div class="document-section" id="documentsCard" style="display: none;">
             <div class="document-type">Word Documents (DOC/DOCX)</div>
-            <div class="card">
+            <div class="card-images">
                 @if(isset($media) && $media->count())
                     @foreach($media as $item)
                     @if($item->document && (pathinfo($item->document, PATHINFO_EXTENSION) == 'doc' || pathinfo($item->document, PATHINFO_EXTENSION) == 'docx'))

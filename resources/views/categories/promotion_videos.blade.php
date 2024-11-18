@@ -123,7 +123,7 @@
         .media-item .name, .media-item .date {
             font-size: 14px;
             color: #fff;
-            font-family: "Konkhmer Sleokchher", system-ui;
+            font-family: "Bree Serif", serif;
             text-shadow: 
             1px 1px 0 black,
             -1px -1px 0 black,

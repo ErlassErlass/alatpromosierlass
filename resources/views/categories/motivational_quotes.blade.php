@@ -85,10 +85,10 @@
     }
 
     .quotes {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 4 kolom dengan lebar yang sama */
-        gap: 20px;
-        justify-content: center;
+        display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0; /* Tambahkan margin atas dan bawah */
     }
 
     .quote-card {
@@ -101,6 +101,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        width: 300px;
     }
 
     .quote-card:hover {
@@ -110,11 +111,12 @@
 
     .quote-card img {
         width: 100%;
-        height: 200px; /* Set a fixed height for images */
-        object-fit: cover;
-        border-radius: 10px;
-        cursor: pointer;
-        margin-bottom: 10px;
+            height: 200px; /* Tetapkan tinggi tetap untuk gambar */
+            object-fit: contain; /* Pastikan gambar tidak terpotong dan tetap dalam rasio aspeknya */
+            cursor: pointer;
+            border: 2px solid #ffffff; /* Garis tepi putih pada gambar */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Bayangan gambar */
+            border-radius: 10px;
     }
 
     .quote-card .name {
@@ -368,10 +370,10 @@
                 @endif
                 <div class="name">{{ $item->quote }}</div>
                 <div class="icon-container">
-                    <img src="../gif/copy.gif" alt="Copy" class="copy-gif" id="copy-gif" onclick="copyText('{{ $item->quote }}'); event.stopPropagation();" style="cursor: pointer; width: 25px; height: 25px; margin-left: 10px;">
+                    <img style="border:0px;" src="../gif/copy.gif" alt="Copy" class="copy-gif" id="copy-gif" onclick="copyText('{{ $item->quote }}'); event.stopPropagation();" style="cursor: pointer; width: 25px; height: 25px; margin-left: 10px;">
                     @if($item->image)
                         <a href="{{ $item->image }}" download>
-                            <img src="../gif/download.gif" alt="Download" class="download-gif" id="download-gif" onclick="event.stopPropagation();">
+                            <img style="border: 0px ;" src="../gif/download.gif" alt="Download" class="download-gif" id="download-gif" onclick="event.stopPropagation();">
                         </a>
                     @endif
                 </div>                   
