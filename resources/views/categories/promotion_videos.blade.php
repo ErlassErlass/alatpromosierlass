@@ -121,7 +121,7 @@
 }
 
         .media-item .name, .media-item .date {
-            font-size: 14px;
+            font-size: 20px;
             color: #fff;
             font-family: "Bree Serif", serif;
             text-shadow: 
