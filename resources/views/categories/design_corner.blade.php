@@ -413,6 +413,11 @@
             font-size: 30px;
             margin: 10px 17px;
         }
+        .info {
+            font-family: "Bree Serif", serif;
+            font-size: 20px;
+            color: #333; /* Warna teks deskripsi lebih gelap */
+        }
     </style>
 </head>
 <body>
@@ -462,7 +467,7 @@
                 @endif
                 @endforeach
             @else
-                <p>Tidak ada media yang tersedia.</p>
+                <p class="info">Tidak ada media yang tersedia.</p>
             @endif
         </div>
     
@@ -488,7 +493,7 @@
                     @endif
                     @endforeach
                 @else
-                    <p>Tidak ada dokumen yang tersedia.</p>
+                    <p class="info">Tidak ada dokumen yang tersedia.</p>
                 @endif
             </div>
 
@@ -510,7 +515,7 @@
                     @endif
                     @endforeach
                 @else
-                    <p>Tidak ada dokumen yang tersedia.</p>
+                    <p class="info">Tidak ada dokumen yang tersedia.</p>
                 @endif
             </div>
 
@@ -546,7 +551,7 @@
                     @endif
                     @endforeach
                 @else
-                    <p>Tidak ada dokumen yang tersedia.</p>
+                    <p class="info">Tidak ada dokumen yang tersedia.</p>
                 @endif
             </div>
         </div>

@@ -277,6 +277,11 @@
             margin: 20px auto;
             text-align: center;
         }
+        .info {
+            font-family: "Bree Serif", serif;
+            font-size: 20px;
+            color: #333; /* Warna teks deskripsi lebih gelap */
+        }
     </style>
 </head>
 <body>
@@ -303,25 +308,29 @@
             @endif
     
             <div class="video-container media-container">
-                @foreach($media as $item)
-                @if($item->media && in_array(pathinfo($item->media, PATHINFO_EXTENSION), ['mp4', 'mkv', 'avi']))
-                <div class="media-item">
-                    @if($item->is_new)
-                        <div class="media-badge">New</div>
-                    @endif
-                    <img src="{{ $item->thumbnail }}" alt="Thumbnail" class="video-thumbnail" style="cursor: pointer; border-radius: 10px; width: 100%; max-height: 200px; object-fit: cover;">
-                    <video controls style="display: none;">
-                        <source src="{{ $item->media }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <p class="name">{{ $item->video_title }}</p>
-                </div>
+                @if(count($media) > 0)
+                    @foreach($media as $item)
+                        @if($item->media && in_array(pathinfo($item->media, PATHINFO_EXTENSION), ['mp4', 'mkv', 'avi']))
+                            <div class="media-item">
+                                @if($item->is_new)
+                                    <div class="media-badge">New</div>
+                                @endif
+                                <img src="{{ $item->thumbnail }}" alt="Thumbnail" class="video-thumbnail" style="cursor: pointer; border-radius: 10px; width: 100%; max-height: 200px; object-fit: cover;">
+                                <video controls style="display: none;">
+                                    <source src="{{ $item->media }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <p class="name">{{ $item->video_title }}</p>
+                            </div>
+                        @else
+                            <div class="media-item">
+                                <p class="info">Video tidak dapat diputar.</p>
+                            </div>
+                        @endif
+                    @endforeach
                 @else
-                <div class="media-item">
-                    <p>Video tidak dapat diputar.</p>
-                </div>
+                    <p class="info">Tidak ada video yang tersedia.</p>
                 @endif
-            @endforeach
             </div>
         </div>
     </main>

@@ -121,14 +121,9 @@
 
     .quote-card .name {
         font-size: 22px; /* Sedikit lebih kecil agar muat */
-        color: #fff;
+        color: black;
         margin: 10px 0 5px;
         font-family: "Bree Serif", serif;
-        text-shadow: 
-            1px 1px 0 black,
-            -1px -1px 0 black,
-            1px -1px 0 black,
-            -1px 1px 0 black;
         flex-grow: 1;
     }
 
@@ -341,6 +336,11 @@
             margin: 20px auto;
             text-align: center;
         }
+        .info {
+            font-family: "Bree Serif", serif;
+            font-size: 20px;
+            color: #333; /* Warna teks deskripsi lebih gelap */
+        }
     </style>
 </head>
 <body>
@@ -358,7 +358,7 @@
         </div>
         <div class="quotes">
             @if ($media->isEmpty())
-                <p>Belum ada media yang diupload.</p>
+                <p class="info">Belum ada media yang diupload.</p>
             @else
             @foreach ($media as $item)
             <div class="quote-card">

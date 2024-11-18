@@ -91,7 +91,6 @@
             font-weight: bold; /* Membuat nama lebih menonjol */
             margin: 10px 0 5px; /* Margin atas dan bawah untuk nama */
             color: #222; /* Warna teks lebih gelap untuk kontras */
-            font-family: "Bree Serif", serif;
         }
 
         .media-item .description {
@@ -99,7 +98,6 @@
             font-size: 20px;
             color: #333; /* Warna teks deskripsi lebih gelap */
             margin-bottom: 10px; /* Menambahkan jarak bawah untuk deskripsi */
-            font-family: "Bree Serif", serif;
         }
 
         .media-footer {
@@ -283,6 +281,11 @@
             margin: 20px auto;
             text-align: center;
         }
+        .info {
+            font-family: "Bree Serif", serif;
+            font-size: 20px;
+            color: #333; /* Warna teks deskripsi lebih gelap */
+        }
     </style>
 </head>
 <body>
@@ -321,7 +324,7 @@
                 </div>
                 @endforeach
             @else
-                <p>Tidak ada media yang tersedia.</p>
+                <p class="info">Tidak ada media yang tersedia.</p>
             @endif
         </div>
     </main>

@@ -89,7 +89,7 @@
             font-size: 22px; /* Ukuran font lebih besar */
             font-weight: bold; /* Membuat nama lebih menonjol */
             margin: 10px 0 5px; /* Margin atas dan bawah untuk nama */
-            color: white; /* Warna teks lebih gelap untuk kontras */
+            color: black; /* Warna teks lebih gelap untuk kontras */
         }
 
         .media-item .description {
@@ -281,6 +281,11 @@
             margin: 20px auto;
             text-align: center;
         }
+        .info {
+            font-family: "Bree Serif", serif;
+            font-size: 20px;
+            color: #333; /* Warna teks deskripsi lebih gelap */
+        }
     </style>
 </head>
 <body>
@@ -319,7 +324,7 @@
                     </div>
                 @endforeach
             @else
-                <p>Tidak ada media yang tersedia.</p>
+                <p class="info">Tidak ada media yang tersedia.</p>
             @endif
         </div>
     </main>
