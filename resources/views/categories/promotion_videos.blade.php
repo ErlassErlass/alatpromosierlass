@@ -122,13 +122,8 @@
 
         .media-item .name, .media-item .date {
             font-size: 20px;
-            color: #fff;
+            color: black;
             font-family: "Bree Serif", serif;
-            text-shadow: 
-            1px 1px 0 black,
-            -1px -1px 0 black,
-            1px -1px 0 black,
-            -1px 1px 0 black;
         }
 
         /* Back Button Styling */
