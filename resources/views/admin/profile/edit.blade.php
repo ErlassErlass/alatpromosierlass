@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Edit Profile</h2>
-    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

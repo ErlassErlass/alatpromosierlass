@@ -5,7 +5,11 @@
     .pagination-wrapper {
         margin-top: 0px; /* Jarak atas untuk pagination */
     }
+    .category-button {
+        margin-right: 10px;
+    }
 </style>
+
 @section('content')
 <main class="app-main"> 
     <div class="app-content-header"> 
@@ -26,8 +30,15 @@
 
     <div class="app-content"> 
         <div class="container-fluid">
+            <!-- Navigation Buttons for Categories -->
+            <div class="mb-3">
+                @foreach (['motivational_quotes', 'alat_promosi_internal', 'design_corner', 'promotion_videos', 'produk'] as $category)
+                    <button class="btn btn-primary category-button" onclick="showCategory('{{ $category }}')">{{ ucfirst(str_replace('_', ' ', $category)) }}</button>
+                @endforeach
+            </div>
+
             @foreach (['motivational_quotes', 'alat_promosi_internal', 'design_corner', 'promotion_videos', 'produk'] as $category)
-            <div class="card mb-4 category-card" data-category="{{ $category }}">
+            <div class="card mb-4 category-card" data-category="{{ $category }}" id="{{ $category }}-card" style="display: none;">
                 <div class="card-header">
                     <h3 class="card-title">{{ ucfirst(str_replace('_', ' ', $category)) }}</h3>
                 </div>
@@ -47,7 +58,8 @@
                                     <th>Gambar</th>
                                     <th>Tanggal Upload</th>
                                 @elseif ($category === 'design_corner')
-                                    <th>Nama Desainer</th>
+                                    <th>Jenis Upload</th> <!-- New column for upload type -->
+                                    <th>Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Tanggal Upload</th>
                                     <th>Media</th>
@@ -77,7 +89,7 @@
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
                                         @endif
-                                    </td>
+ </td>
                                     <td>{{ Str::limit($item->quote, 50) }}</td>
                                     <td>{{ $item->upload_date }}</td>
                                 @elseif ($item->category === 'alat_promosi_internal')
@@ -86,10 +98,11 @@
                                     <td>
                                         @if ($item->image)
                                             <img src="{{ $item->image }}" alt="Gambar Media" style="width: 100px; height: 100px;">
-                                        @ @endif
+                                        @endif
                                     </td>
                                     <td>{{ $item->upload_date }}</td>
-                                    @elseif ($item->category === 'design_corner')
+                                @elseif ($item->category === 'design_corner')
+                                    <td>{{ $item->image ? 'Gambar' : 'Dokumen' }}</td>
                                     <td>{{ $item->designer_name }}</td>
                                     <td>{{ Str::limit($item->description, 50) }}</td>
                                     <td>{{ $item->upload_date }}</td>
@@ -159,7 +172,6 @@
         </div>
     </div>
 </main>
-
 <!-- Modal Edit -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -207,6 +219,23 @@
 </div>
 
 <script>
+function showCategory(category) {
+    const categories = ['motivational_quotes', 'alat_promosi_internal', 'design_corner', 'promotion_videos', 'produk'];
+    categories.forEach(cat => {
+        const card = document.getElementById(`${cat}-card`);
+        if (cat === category) {
+            card.style.display = 'block'; // Show the selected category
+        } else {
+            card.style.display = 'none'; // Hide other categories
+        }
+    });
+}
+
+// Initialize to show the motivational quotes category by default
+document.addEventListener('DOMContentLoaded', () => {
+    showCategory('motivational_quotes'); // This ensures the motivational quotes table is shown first
+});
+    
 const itemsPerPage = 5; // Set the number of items per page
 
 function changePage(category, direction) {
@@ -298,7 +327,7 @@ function openEditModal(id, category, mediaType) {
         if (mediaType === 'image') {
             formContent = `
                 <div class="form-group">
-                    <label for="designer_name">Nama Desainer</label>
+                    <label for="designer_name">Judul</label>
                     <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">
@@ -318,7 +347,7 @@ function openEditModal(id, category, mediaType) {
         } else if (mediaType === 'document') {
             formContent = `
                 <div class="form-group">
-                    <label for="designer_name">Nama Desainer</label>
+                    <label for="designer_name">Judul</label>
                     <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">
@@ -331,7 +360,7 @@ function openEditModal(id, category, mediaType) {
                 </div>
                 <div class="form-group">
                     <label for="document">Upload Dokumen</label>
-                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx,.xlsx" required>
+                    <input type="file" id="document" name="document" class="form-control" accept=".pdf,.doc,.docx,.xlsx,.xls" required>
                 </div>
             `;
         }

@@ -178,7 +178,7 @@
         if (uploadType === 'image') {
             designFormContent = `
                 <div class="form-group">
-                    <label for="designer_name">Nama Desainer</label>
+                    <label for="designer_name">Judul</label>
                     <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">
@@ -198,7 +198,7 @@
         } else if (uploadType === 'document') {
             designFormContent = `
                 <div class="form-group">
-                    <label for="designer_name">Nama Desainer</label>
+                    <label for="designer_name">Judul</label>
                     <input type="text" id="designer_name" name="designer_name" class="form-control" required>
                 </div>
                 <div class="form-group">

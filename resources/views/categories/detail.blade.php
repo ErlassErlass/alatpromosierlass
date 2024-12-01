@@ -197,7 +197,7 @@
                         <br/>
                     </p>
                 </div>
-                <img style="width: 64px; height: 64px; border: 0px; right: 1px;" onclick="downloadContent()" src="../gif/download.gif" alt="Download" class="download-gif">
+                <img onclick="downloadContent()" src="../gif/download.gif" alt="Download" class="download-gif">
             </div>
         </div>
     </div>

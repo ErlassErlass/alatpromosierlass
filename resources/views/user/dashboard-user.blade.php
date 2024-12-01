@@ -31,68 +31,112 @@
             flex-direction: column;
             min-height: 100vh;
         }
-.wave,
-.wave::before,
-.wave::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200vw; /* Atur lebar gelombang */
-    height: 300vw; /* Atur tinggi gelombang */
-    margin-left: -100vw; /* Sesuaikan margin untuk memposisikan gelombang */
-    transform-origin: 50% 50%;
-    background-color: transparent; /* Anda bisa mengubah ini jika ingin warna latar belakang */
-    border-radius: 38% 42%;
-    box-shadow: inset 0 0 10vw #e394bd; /* Ganti dengan warna pekat (contoh: merah oranye) */
-    animation: spin 16s infinite linear;
-    mix-blend-mode: multiply;
-}
 
-.wave::before {
-    width: 100%;
-    height: 80%;
-    margin-top: -100vw; /* Atur margin untuk memposisikan gelombang atas */
-    transform-origin: 49% 51%;
-    border-radius: 40% 38%;
-    box-shadow: inset 0 0 10vw #78c6eb; /* Ganti dengan warna pekat (contoh: kuning pekat) */
-    animation: spin 13s infinite linear;
-}
-
-.wave::after {
-    width: 100%;
-    height: 85%;
-    margin-top: -100vw; /* Atur margin untuk memposisikan gelombang bawah */
-    transform-origin: 51% 49%;
-    border-radius: 48% 42%;
-    box-shadow: inset 0 0 10vw #e63e25; /* Ganti dengan warna pekat (contoh: biru pekat) */
-    animation: spin 10s infinite linear;
-}
-
-/* Media Queries untuk Gelombang */
-@media (max-width: 768px) {
-    .wave,
-    .wave::before,
-    .wave::after {
-        width: 300vw; /* Lebar gelombang lebih besar untuk layar kecil */
-        height: 400vw; /* Tinggi gelombang lebih besar untuk layar kecil */
-        margin-left: -150vw; /* Sesuaikan margin untuk memposisikan gelombang */
-    }
-}
-
-@media (max-width: 480px) {
-    .wave,
-    .wave::before,
-    .wave::after {
-        width: 400vw; /* Lebar gelombang lebih besar untuk layar ekstra kecil */
-        height: 500vw; /* Tinggi gelombang lebih besar untuk layar ekstra kecil */
-        margin-left: -200vw; /* Sesuaikan margin untuk memposisikan gelombang */
-    }
-}
-
-        @keyframes spin {
-        100% { transform: rotate(360deg); }
+        .hero__title {
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+        z-index: 1;
         }
+
+        .cube-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0; /* Ensure it's behind other content */
+}
+
+.shape {
+    position: absolute;
+    opacity: 0; /* Start invisible */
+    animation: fadeIn 12s ease-in forwards infinite; /* General animation */
+}
+
+.cube {
+    width: 10px;
+    height: 10px;
+    border: solid 1px darkviolet;
+    transform-origin: top left;
+    animation: cubeAnimation 12s ease-in forwards infinite;
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid #e06324; /* Triangle color */
+    transform-origin: top left;
+    animation: triangleAnimation 12s ease-in forwards infinite;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #0051f4; /* Circle color */
+    animation: circleAnimation 12s ease-in forwards infinite;
+}
+
+/* Cube Animation */
+@keyframes cubeAnimation {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: scale(20) rotate(960deg) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Triangle Animation */
+@keyframes triangleAnimation {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: scale(20) rotate(960deg) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Circle Animation */
+@keyframes circleAnimation {
+    from {
+        transform: scale(0) rotate(0deg) translate(-50%, -50%);
+        opacity: 1;
+    }
+    to {
+        transform: scale(20) rotate(960deg) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Positioning the Shapes */
+.shape:nth-child(1) { left: 25vw; top: 80vh; animation-delay: 0s; }
+.shape:nth-child(2) { left: 10vw; top: 40vh; animation-delay: 2s; }
+.shape:nth-child(3) { left: 75vw; top: 50vh; animation-delay: 4s; }
+.shape:nth-child(4) { left: 90vw; top: 10vh; animation-delay: 6s; }
+.shape:nth-child(5) { left: 10vw; top: 85vh; animation-delay: 8s; }
+.shape:nth-child(6) { left: 50vw; top: 10vh; animation-delay: 10s; }
 
         /* Animasi untuk elemen yang muncul */
         @keyframes fadeIn {
@@ -137,7 +181,7 @@
             top: 50%; 
             transform: translateY(-50%); 
             max-width: 20vw; /* Ukuran awal lebih kecil untuk gambar kiri */
-            width: 140px; /* Ukuran tetap awal untuk gambar kiri */
+            width: 100px; /* Ukuran tetap awal untuk gambar kiri */
         }
 
         #right-image {
@@ -146,7 +190,7 @@
             top: 50%; 
             transform: translateY(-50%); 
             max-width: 30vw; /* Ukuran awal lebih kecil untuk gambar kanan */
-            width: 210px; /* Ukuran tetap awal untuk gambar kanan */
+            width: 150px; /* Ukuran tetap awal untuk gambar kanan */
         }
 
         .logo-box img {
@@ -163,13 +207,6 @@
         .hero_area h1 {
             color: #6ba0d1;
             position: relative;
-            text-shadow: 
-            1px 1px 0 rgb(255, 255, 255),
-            -1px -1px 0 rgb(248, 248, 248),
-            1px -1px 0 rgb(251, 250, 250),
-            -1px 1px 0 rgb(246, 246, 246),
-            0 1px 0 rgb(247, 247, 247),
-            0 -1px 0 rgb(255, 255, 255);
             font-family: "Candal", sans-serif;
             font-weight: bold;
             font-size: 64px;
@@ -373,7 +410,14 @@
     </style>
 </head>
 <body>
-    <div class="wave"></div>
+    <div class="cube-background">
+        <div class="shape cube"></div>
+        <div class="shape triangle"></div>
+        <div class="shape circle"></div>
+        <div class="shape cube"></div>
+        <div class="shape triangle"></div>
+        <div class="shape circle"></div>
+    </div>
     <div class="hero_area">
         <div class="logo-box">
             <img id="right-image" src="images/coding.png" alt="Logo kanan" />

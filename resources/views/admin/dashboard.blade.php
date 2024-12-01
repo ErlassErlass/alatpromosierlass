@@ -88,34 +88,36 @@
                                 <h3 class="card-title">Media Terbaru</h3>
                             </div>
                             <div class="card-body">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Kategori</th>
-                                            <th>Judul</th>
-                                            <th>Tanggal Unggah</th>
-                                            <th>Deskripsi</th>
-                                            <th>Nama Desainer</th>
-                                            <th>Judul Video</th>
-                                            <th>Kutipan</th>
-                                            <th>Nama Pengguna</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($recentMedia as $media)
-                                        <tr>
-                                            <td>{{ $media->category }}</td>
-                                            <td>{{ $media->title }}</td>
-                                            <td>{{ $media->upload_date }}</td>
-                                            <td>{{ Str::limit($media->description, 50) }}</td> <!-- Deskripsi dipersingkat -->
-                                            <td>{{ $media->designer_name }}</td>
-                                            <td>{{ $media->video_title }}</td>
-                                            <td>{{ $media->quote }}</td>
-                                            <td>{{ $media->user->name }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>                                    
-                                </table>
+                                <div class="table-responsive"> <!-- Tambahkan div ini -->
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Kategori</th>
+                                                <th>Judul</th>
+                                                <th>Tanggal Unggah</th>
+                                                <th>Deskripsi</th>
+                                                <th>Judul Desain</th>
+                                                <th>Judul Video</th>
+                                                <th>Kutipan</th>
+                                                <th>Nama Pengguna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($recentMedia as $media)
+                                            <tr>
+                                                <td>{{ $media->category }}</td>
+                                                <td>{{ $media->title }}</td>
+                                                <td>{{ $media->upload_date }}</td>
+                                                <td>{{ Str::limit($media->description, 50) }}</td> <!-- Deskripsi dipersingkat -->
+                                                <td>{{ $media->designer_name }}</td>
+                                                <td>{{ $media->video_title }}</td>
+                                                <td>{{ $media->quote }}</td>
+                                                <td>{{ $media->user->name }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>                                    
+                                    </table>
+                                </div> <!-- Tutup div responsif -->
                             </div>
                         </div>
                     </div>

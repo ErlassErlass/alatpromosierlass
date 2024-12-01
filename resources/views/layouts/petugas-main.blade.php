@@ -22,15 +22,72 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head> <!--end::Head--> <!--begin::Body-->
 <style>
+    .nav-item p{
+        color: white;
+        font-weight: bold;
+    }
     .nav-icon {
-    margin-right: 8px; /* Menambahkan jarak antara ikon dan teks */
-    font-size: 1.2em; /* Ukuran ikon yang lebih besar jika perlu */
-}
+        margin-right: 8px; /* Menambahkan jarak antara ikon dan teks */
+        font-size: 1.2em; /* Ukuran ikon yang lebih besar jika perlu */
+    }
 
-/* Menambahkan efek hover pada ikon */
-.nav-link:hover .nav-icon {
-    color: #ffffff; /* Ubah warna ikon saat hover */
-}
+    /* Menambahkan efek hover pada ikon */
+    .nav-link:hover .nav-icon {
+        color: #007bff; /* Ubah warna ikon saat hover */
+    }
+
+    #loadingIndicator {
+        font-weight: bold;
+        color: #007bff; /* Bootstrap primary color */
+        margin-top: 10px;
+    }
+
+.app-sidebar {
+        background: #4e54c8; /* Set the background color for the sidebar */
+        background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8 ); /* Gradient background */
+        width: 250px; /* Set the width of the sidebar */
+        height: 100vh; /* Full height */
+        position: fixed; /* Fixed position */
+        overflow: hidden; /* Prevent overflow */
+    }
+
+    .circles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0; /* Ensure circles are behind other content */
+    }
+
+    .circles li {
+        position: absolute;
+        display: block;
+        list-style: none;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        animation: animate 25s linear infinite;
+        bottom: -150px;
+    }
+
+    .circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+    .circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+    .circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+    .circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+    .circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+    .circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+    .circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+    .circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+    .circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+    .circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+    @keyframes animate {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+        100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+    }
+
 
 </style>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary"> <!--begin::App Wrapper-->
@@ -62,39 +119,56 @@
                 </ul> 
             </div> 
         </nav>  <!--end::Header--> <!--begin::Sidebar-->
-        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark"> 
+        <aside class="app-sidebar"> 
+            <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
             <div class="sidebar-brand"> 
-                <a href="{{ route('petugas.dashboard') }}" class="brand-link"> 
-                    <img src="/images/petugas.png" alt="Petugas Page" class="brand-image opacity-75 shadow"> 
-                    <span class="brand-text fw-light">Petugas Page</span> 
+                <a href="{{ route('admin.dashboard') }}" class="brand-link"> 
+                    <img src="/images/admin.png" alt="Admin Page" class="brand-image opacity-75 shadow"> 
+                    <span style="color: white; font-weight: bold;" class="brand-text">Admin Page</span> 
                 </a> 
-            </div>
+            </div> 
+            <!--begin::Sidebar Wrapper-->
             <div class="sidebar-wrapper">
                 <nav class="mt-2">
+                    <!--begin::Sidebar Menu-->
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+                        <!-- Menu Dashboard sebagai tombol -->
                         <li class="nav-item">
-                            <a href="{{ route('petugas.dashboard') }}" class="nav-link {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}">
-                                <i class="nav-icon bi bi-speedometer"></i>
+                            <a href="{{ route('petugas.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                                <i style="color: white;" class="nav-icon bi bi-speedometer"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a href="{{ route('petugas.media.upload') }}" class="nav-link">
-                                <i class="nav-icon fas fa-upload"></i>
+                                <i style="color: white;" class="nav-icon fas fa-upload"></i>
                                 <p>Upload Media</p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a href="{{ route('petugas.media.index') }}" class="nav-link {{ request()->routeIs('petugas.media.index') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-images"></i>
+                                <i style="color: white;" class="nav-icon fas fa-images"></i>
                                 <p>Media</p>
                             </a>
                         </li>
-
-                        <li class="nav-header">Auth</li>
+                        
+                        <!-- Menu Auth -->
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                                <i style="color: white;"class="nav-icon bi bi-box-arrow-in-right"></i>
                                 <p>
                                     Auth
                                     <i class="nav-arrow bi bi-chevron-right"></i>
@@ -107,16 +181,19 @@
                                         @csrf
                                     </form>
                                     <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="nav-icon bi bi-box-arrow-right"></i>
+                                        <i style="color: white;" class="nav-icon bi bi-box-arrow-right"></i>
                                         <p>Logout</p>
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>                        
                     </ul>
-                </nav>
-            </div>
-        </aside> <!--end::Sidebar--> <!--begin::App Main-->
+                    <!--end::Sidebar Menu-->
+                </nav>                                                                                             
+            </div> 
+            <!--end::Sidebar Wrapper-->
+        </aside>
+        <!--begin::App Main-->
         <main class="app-main">
             @yield('content') 
         </main> <!--end::App Main--> <!--begin::Footer-->
